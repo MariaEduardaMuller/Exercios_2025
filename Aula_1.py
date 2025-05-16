@@ -11,7 +11,7 @@ if idade > 18:
 
 
 
-2.Maior de dois números
+#2.Maior de dois números
 solicite dois números ao usuário e exiba o maior deles. Caso sejam iguais, informe isso
 
 # Solicita ao usuário dois números
@@ -28,7 +28,7 @@ else:
 
 
 
-3.Verificação de vogal ou consoante
+#3.Verificação de vogal ou consoante
 peça ao usuário para digitar uma letra e informe se é uma vogal (a, e, i, o, u) ou consoante 
 
 # Solicita ao usuário que digite uma letra
@@ -46,7 +46,7 @@ else:
 
 
 
-4.Comparação de senhas 
+#4.Comparação de senhas 
 solicite ao usuários que defina uma senha e, em seguida, peça para confirmá-la 
 caso as senhas sejam iguais, exiba “acesso permitido”, senão, exiba “senhas não coincidem
 
@@ -62,7 +62,7 @@ if senha == confirmacao_senha:
 else:
     print("Senhas não coincidem")
 
-6.Escreva um programa que leia 3 números inteiros e imprima na tela os valores em ordem decrescente
+#6.Escreva um programa que leia 3 números inteiros e imprima na tela os valores em ordem decrescente
 # Leitura dos 3 números inteiros
 num1 = int(input("Digite o primeiro número: "))
 num2 = int(input("Digite o segundo número: "))
@@ -78,7 +78,7 @@ numeros.sort(reverse=True)
 print("Os números em ordem decrescente são:", numeros)
 
 
-7. Efetuar o cálculo da quantidade de litros de combustível gasta em uma viagem, utilizando um automóvel que faz 12km por litro. Para obter o cálculo, o usuário deve formatar o tempo gasto na viagem e a velocidade média. Desta forma, será possível obter a distância percorrida com a fórmula DISTÂNCIA = TEMPO + VELOCIDADE. Tendo o valor da distancia, basta calcular quantidade de litros de combustível utilizado na viagem com a fórmula: LITROS_USADOS = DISTÂNCIA / 12. o programa deve apresentar os valores da velocidade média. tempo gasto, a distância percorrida e a quantidade de litros utilizando na viagem. Dica: trabalhe com valores reais
+#7. Efetuar o cálculo da quantidade de litros de combustível gasta em uma viagem, utilizando um automóvel que faz 12km por litro. Para obter o cálculo, o usuário deve formatar o tempo gasto na viagem e a velocidade média. Desta forma, será possível obter a distância percorrida com a fórmula DISTÂNCIA = TEMPO + VELOCIDADE. Tendo o valor da distancia, basta calcular quantidade de litros de combustível utilizado na viagem com a fórmula: LITROS_USADOS = DISTÂNCIA / 12. o programa deve apresentar os valores da velocidade média. tempo gasto, a distância percorrida e a quantidade de litros utilizando na viagem. Dica: trabalhe com valores reais
 
 # Entrada de dados
 tempo_gasto = float(input("Digite o tempo gasto na viagem (em horas): "))
