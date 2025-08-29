@@ -1,0 +1,69 @@
+from fastapi import FastAPI, HTTPException, status
+from pydantic import BaseModel
+from typing import Dict
+
+# aplicação fastapi
+app = FastAPI(
+    title="API de Cadastro de Alunos",
+    description="API para realizar as quatro operações básicas (CRUD) para alunos.",
+    version="1.0.0"
+)
+
+# modelo dados aluno
+class Aluno(BaseModel):
+    nome: str
+    turma: str
+    idade: int
+
+# banco de dados em memória
+db_alunos: Dict[int, Aluno] = {
+    1: Aluno(nome="Gustavo Henrique", turma="2A", idade=16),
+    2: Aluno(nome="Maria Muller", turma="2B", idade=17),
+    3: Aluno(nome="João Vitor", turma="1B", idade=15),
+}
+
+# agora os endpoint
+
+@app.get("/")
+def read_root():
+    """Endpoint raiz da API."""
+    return {"message": "Bem vindo a API. Acesse /docs para a documentação interativa."}
+
+@app.get("/alunos")
+def listar_alunos():
+    """retorna todos alunos cadastrados."""
+    return db_alunos
+
+@app.get("/alunos/{matricula}")
+def pegar_aluno(matricula: int):
+    """retorna aluno específico pela matrícula."""
+    if matricula not in db_alunos:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Aluno não encontrado")
+    return db_alunos[matricula]
+
+@app.post("/alunos/{matricula}", status_code=status.HTTP_201_CREATED)
+def criar_aluno(matricula: int, aluno: Aluno):
+    """cria novo aluno com matrícula específica."""
+    if matricula in db_alunos:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Já existe um aluno com essa matrícula")
+    
+    db_alunos[matricula] = aluno
+    return {"message": "Aluno cadastrado com sucesso!", "matrícula": matricula, "aluno": aluno}
+
+@app.put("/alunos/{matricula}")
+def atualizar_aluno(matricula: int, aluno: Aluno):
+    """stualiza os dados de aluno existente."""
+    if matricula not in db_alunos:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Aluno não encontrado")
+    
+    db_alunos[matricula] = aluno
+    return {"message": "Cadastro do aluno atualizado com sucesso!", "aluno": aluno}
+
+@app.delete("/alunos/{matricula}")
+def deletar_aluno(matricula: int):
+    """Deleta o cadastro de um aluno."""
+    if matricula not in db_alunos:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Aluno não encontrado")
+    
+    del db_alunos[matricula]
+    return {"message": "Aluno deletado com sucesso!"}
