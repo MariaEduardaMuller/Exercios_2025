@@ -1,0 +1,75 @@
+import pytest
+from fastapi.testclient import TestClient
+from main import app, db_tarefas  # Importa o app
+
+client = TestClient(app)
+
+# Função para limpar lista antes de cada teste (simples)
+def reset_db():
+    db_tarefas.clear()
+
+# Teste de criação (requisito funcional: criar com sucesso)
+def test_criar_tarefa_sucesso():
+    reset_db()
+    response = client.post("/tarefas?titulo=Estudar%20Python&descricao=Teste")  # Query params simples
+    assert response.status_code == 201
+    data = response.json()
+    assert data["titulo"] == "Estudar Python"
+    assert data["id"] == 1  # ID gerado
+
+# Teste de falha na criação (validação)
+def test_criar_tarefa_falha():
+    reset_db()
+    response = client.post("/tarefas?titulo=AB")  # Título curto
+    assert response.status_code == 400
+
+# Teste de listagem vazia
+def test_listar_vazia():
+    reset_db()
+    response = client.get("/tarefas")
+    assert response.status_code == 200
+    assert response.json() == []
+
+# Teste de listagem com dados
+def test_listar_com_dados():
+    reset_db()
+    client.post("/tarefas?titulo=Tarefa1")
+    client.post("/tarefas?titulo=Tarefa2")
+    response = client.get("/tarefas")
+    assert len(response.json()) == 2
+
+# Teste de obter por ID (sucesso e erro)
+def test_obter_sucesso():
+    reset_db()
+    client.post("/tarefas?titulo=Teste")
+    response = client.get("/tarefas/1")
+    assert response.status_code == 200
+
+def test_obter_erro():
+    reset_db()
+    response = client.get("/tarefas/999")
+    assert response.status_code == 404
+
+# Teste de atualização (sucesso e erro)
+def test_atualizar_sucesso():
+    reset_db()
+    client.post("/tarefas?titulo=Original")
+    response = client.put("/tarefas/1?titulo=Atualizado&concluida=true")
+    assert response.status_code == 200
+
+def test_atualizar_erro():
+    reset_db()
+    response = client.put("/tarefas/999?titulo=Teste")
+    assert response.status_code == 404
+
+# Teste de deleção (sucesso e erro)
+def test_deletar_sucesso():
+    reset_db()
+    client.post("/tarefas?titulo=Deletar")
+    response = client.delete("/tarefas/1")
+    assert response.status_code == 204
+
+def test_deletar_erro():
+    reset_db()
+    response = client.delete("/tarefas/999")
+    assert response.status_code == 404
